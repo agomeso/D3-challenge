@@ -17,10 +17,10 @@ function makeResponsive() {
     var svgHeight = window.innerHeight;
 
     var margin = {
-        top: 100,
-        bottom: 100,
-        right: 100,
-        left: 100
+        top: 50,
+        bottom: 50,
+        right: 50,
+        left: 50
     };
 
     var height = svgHeight - margin.top - margin.bottom;
@@ -73,7 +73,7 @@ function makeResponsive() {
     }
     // function used for updating yAxis var upon click on axis label
     function renderAxes(newYScale, yAxis) {
-        var leftAxis = d3.axisBottom(newYScale);
+        var leftAxis = d3.axisLeft(newYScale);
         yAxis.transition()
             .duration(1000)
             .call(leftAxis);
@@ -107,7 +107,7 @@ function makeResponsive() {
         }
 
         var toolTip = d3.tip()
-            .attr("class", "tooltip")
+            .attr("class", "d3.tip")
             .offset([80, -60])
             .html(function (d) {
                 return (`${d.state}<br>${xlabel} ${d[chosenXAxis]}<br>${ylabel} ${d[chosenYAxis]}`);
@@ -116,7 +116,7 @@ function makeResponsive() {
         circlesGroup.call(toolTip);
 
         circlesGroup.on("mouseover", function (data) {
-            toolTip.show(data);
+            toolTip.show(data, this);
         })
             // onmouseout event
             .on("mouseout", function (data, index) {
@@ -310,13 +310,13 @@ function makeResponsive() {
                     // console.log(chosenXAxis)
 
                     // functions here found above csv import
-                    // updates x scale for new data
+                    // updates y scale for new data
                     yLinearScale = yScale(stateData, chosenYAxis);
 
-                    // updates x axis with transition
+                    // updates y axis with transition
                     yAxis = renderAxes(yLinearScale, yAxis);
 
-                    // updates circles with new x values
+                    // updates circles with new y values
                     circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
                     // updates tooltips with new info
