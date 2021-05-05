@@ -17,10 +17,10 @@ function makeResponsive() {
     var svgHeight = window.innerHeight;
 
     var margin = {
-        top: 50,
-        bottom: 50,
-        right: 50,
-        left: 50
+        top: 100,
+        bottom: 100,
+        right: 100,
+        left: 100
     };
 
     var height = svgHeight - margin.top - margin.bottom;
@@ -195,7 +195,7 @@ function makeResponsive() {
         var ageLabel = xlabelsGroup.append("text")
             .attr("x", 0)
             .attr("y", 40)
-            .attr("value", "income") // value to grab for event listener
+            .attr("value", "age") // value to grab for event listener
             .classed("inactive", true)
             .text("Age (Median)");
 
@@ -210,25 +210,27 @@ function makeResponsive() {
         var ylabelsGroup = chartGroup.append("g")
             .attr("transform", "rotate(-90)");
 
-        var obeseLabel = ylabelsGroup.append("text")
+        var obesityLabel = ylabelsGroup.append("text")
             .attr("y", 0 - margin.left)
             .attr("x", 0 - (height / 2))
-            .attr("value", "obese") // value to grab for event listener
+            .attr("value", "obesity") // value to grab for event listener
             .attr("dy", "1em")
             .classed("active", true)
             .text("Obese (%)")
 
-        var smokeLabel = ylabelsGroup.append("text")
-            .attr("y", 0 - margin.left)
+        var smokesLabel = ylabelsGroup.append("text")
+            .attr("y", 20 - margin.left)
             .attr("x", 0 - (height / 2))
-            .attr("value", "smoke") // value to grab for event listener
+            .attr("value", "smokes") // value to grab for event listener
+            .attr("dy", "1em")
             .classed("inactive", true)
             .text("Smokes (%)");
 
         var healthcareLabel = ylabelsGroup.append("text")
-            .attr("y", 0 - margin.left)
+            .attr("y", 40 - margin.left)
             .attr("x", 0 - (height / 2))
-            .attr("value", "health") // value to grab for event listener
+            .attr("value", "healthcare") // value to grab for event listener
+            .attr("dy", "1em")
             .classed("inactive", true)
             .text("Lacks Healthcare (%)");
 
@@ -283,11 +285,11 @@ function makeResponsive() {
                             .classed("inactive", true);
                     } else {
                         povertyLabel
-                            .classed("active", true)
-                            .classed("inactive", false);
+                            .classed("active", false)
+                            .classed("inactive", true);
                         ageLabel
-                            .classed("active", true)
-                            .classed("inactive", false);
+                            .classed("active", false)
+                            .classed("inactive", true);
                         incomeLabel
                             .classed("active", true)
                             .classed("inactive", false);
@@ -343,11 +345,11 @@ function makeResponsive() {
                             .classed("inactive", true);
                     } else {
                         obesityLabel
-                            .classed("active", true)
-                            .classed("inactive", false);
+                            .classed("active", false)
+                            .classed("inactive", true);
                         smokesLabel
-                            .classed("active", true)
-                            .classed("inactive", false);
+                            .classed("active", false)
+                            .classed("inactive", true);
                         healthcareLabel
                             .classed("active", true)
                             .classed("inactive", false);
