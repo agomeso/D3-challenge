@@ -17,10 +17,10 @@ function makeResponsive() {
     var svgHeight = window.innerHeight;
 
     var margin = {
-        top: 50,
-        bottom: 50,
-        right: 50,
-        left: 50
+        top: 100,
+        bottom: 100,
+        right: 100,
+        left: 100
     };
 
     var height = svgHeight - margin.top - margin.bottom;
@@ -64,7 +64,7 @@ function makeResponsive() {
     }
 
     // function used for updating xAxis var upon click on axis label
-    function renderAxes(newXScale, xAxis) {
+    function renderXAxes(newXScale, xAxis) {
         var bottomAxis = d3.axisBottom(newXScale);
         xAxis.transition()
             .duration(1000)
@@ -72,7 +72,7 @@ function makeResponsive() {
         return xAxis;
     }
     // function used for updating yAxis var upon click on axis label
-    function renderAxes(newYScale, yAxis) {
+    function renderYAxes(newYScale, yAxis) {
         var leftAxis = d3.axisLeft(newYScale);
         yAxis.transition()
             .duration(1000)
@@ -86,7 +86,16 @@ function makeResponsive() {
             .attr("cx", d => newXScale(d[chosenXAxis]))
             .attr("cy", d => newYScale(d[chosenYAxis]));
         return circlesGroup;
-    }
+    };
+
+    // function used for updating name tags
+    function updateTags(chartGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+        chartGroup.transition()
+            .attr("x", d => newXScale(d[chosenXAxis]))
+            .attr("y", d => newYScale(d[chosenYAxis]));
+        return chartGroup
+    };
+
     // function used for updating circles group with new tooltip
     function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
         var xlabel;
@@ -100,17 +109,17 @@ function makeResponsive() {
         var ylabel;
         if (chosenYAxis === "obesity") {
             ylabel = "Obesity";
-        } else if (chosenXAxis === "smokes") {
+        } else if (chosenYAxis === "smokes") {
             ylabel = "Smokes";
-        } else if (chosenXAxis === "healthcare") {
+        } else if (chosenYAxis === "healthcare") {
             ylabel = "Healthcare";
         }
 
         var toolTip = d3.tip()
             .attr("class", "d3.tip")
-            .offset([80, -60])
+            .offset([110, 10])
             .html(function (d) {
-                return (`${d.state}<br>${xlabel} ${d[chosenXAxis]}<br>${ylabel} ${d[chosenYAxis]}`);
+                return (`<b>${d.state}</b><br><b>${xlabel}:</b> ${d[chosenXAxis]}<br><b>${ylabel}:</b> ${d[chosenYAxis]}`);
             });
 
         circlesGroup.call(toolTip);
@@ -181,6 +190,15 @@ function makeResponsive() {
             .attr("fill", "blue")
             .attr("opacity", ".5");
 
+        //append initial tags
+        var chartGroup = chartGroup.selectAll("text")
+            .data(stateData)
+            .enter()
+            .append("text")
+            .attr("x", d => xLinearScale(d[chosenXAxis]))
+            .attr("y", d => yLinearScale(d[chosenYAxis]))
+            .text(d => d.abbr).attr("fill", "black");
+
         // Create group for three x-axis labels
         var xlabelsGroup = chartGroup.append("g")
             .attr("transform", `translate(${width / 2}, ${height + 20})`);
@@ -241,11 +259,11 @@ function makeResponsive() {
         xlabelsGroup.selectAll("text")
             .on("click", function () {
                 // get value of selection
-                var value = d3.select(this).attr("value");
-                if (value !== chosenXAxis) {
+                var xvalue = d3.select(this).attr("value");
+                if (xvalue !== chosenXAxis) {
 
                     // replaces chosenXAxis with value
-                    chosenXAxis = value;
+                    chosenXAxis = xvalue;
 
                     // console.log(chosenXAxis)
 
@@ -254,7 +272,7 @@ function makeResponsive() {
                     xLinearScale = xScale(stateData, chosenXAxis);
 
                     // updates x axis with transition
-                    xAxis = renderAxes(xLinearScale, xAxis);
+                    xAxis = renderXAxes(xLinearScale, xAxis);
 
                     // updates circles with new x values
                     circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
@@ -301,11 +319,11 @@ function makeResponsive() {
         ylabelsGroup.selectAll("text")
             .on("click", function () {
                 // get value of selection
-                var value = d3.select(this).attr("value");
-                if (value !== chosenYAxis) {
+                var yvalue = d3.select(this).attr("value");
+                if (yvalue !== chosenYAxis) {
 
                     // replaces chosenXAxis with value
-                    chosenYAxis = value;
+                    chosenYAxis = yvalue;
 
                     // console.log(chosenXAxis)
 
@@ -314,10 +332,12 @@ function makeResponsive() {
                     yLinearScale = yScale(stateData, chosenYAxis);
 
                     // updates y axis with transition
-                    yAxis = renderAxes(yLinearScale, yAxis);
+                    yAxis = renderYAxes(yLinearScale, yAxis);
 
                     // updates circles with new y values
                     circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
+                    // udpdate circle names with new values
 
                     // updates tooltips with new info
                     circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
