@@ -89,11 +89,12 @@ function makeResponsive() {
     };
 
     // function used for updating name tags
-    function updateTags(chartGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
-        chartGroup.transition()
-            .attr("x", d => newXScale(d[chosenXAxis]))
-            .attr("y", d => newYScale(d[chosenYAxis]));
-        return chartGroup
+    function updateTags(tagGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+        tagGroup.transition()
+            .duration(1000)
+            .attr("x", d => newXScale(d[chosenXAxis]) - 10)
+            .attr("y", d => newYScale(d[chosenYAxis]) + 5);
+        return tagGroup
     };
 
     // function used for updating circles group with new tooltip
@@ -188,16 +189,16 @@ function makeResponsive() {
             .attr("cy", d => yLinearScale(d[chosenYAxis]))
             .attr("r", 20)
             .attr("fill", "blue")
-            .attr("opacity", ".5");
+            .attr("opacity", ".6");
 
         //append initial tags
-        var chartGroup = chartGroup.selectAll("text")
+        var tagGroup = chartGroup.selectAll("text")
             .data(stateData)
             .enter()
             .append("text")
-            .attr("x", d => xLinearScale(d[chosenXAxis]))
-            .attr("y", d => yLinearScale(d[chosenYAxis]))
-            .text(d => d.abbr).attr("fill", "black");
+            .attr("x", d => xLinearScale(d[chosenXAxis]) - 10)
+            .attr("y", d => yLinearScale(d[chosenYAxis]) + 5)
+            .text(d => d.abbr).attr("fill", "white");
 
         // Create group for three x-axis labels
         var xlabelsGroup = chartGroup.append("g")
@@ -255,6 +256,9 @@ function makeResponsive() {
         // updateToolTip function above csv import
         var circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
+        // update tags for csv
+        // var tagGroup = updateTags(tagGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
+
         // x axis labels event listener
         xlabelsGroup.selectAll("text")
             .on("click", function () {
@@ -279,6 +283,9 @@ function makeResponsive() {
 
                     // updates tooltips with new info
                     circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
+
+                    //update tags
+                    tagGroup = updateTags(tagGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
                     // changes classes to change bold text
                     if (chosenXAxis === "poverty") {
@@ -337,7 +344,8 @@ function makeResponsive() {
                     // updates circles with new y values
                     circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
-                    // udpdate circle names with new values
+                    //update tags
+                    tagGroup = updateTags(tagGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
                     // updates tooltips with new info
                     circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
