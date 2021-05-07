@@ -180,8 +180,11 @@ function makeResponsive() {
             .classed("y-axis", true)
             .call(leftAxis);
 
+        // Create a new group to correct d3 not appending all the state tags
+        var newGroup = chartGroup.append("g")
+
         // append initial circles
-        var circlesGroup = chartGroup.selectAll("circle")
+        var circlesGroup = newGroup.selectAll("circle")
             .data(stateData)
             .enter()
             .append("circle")
@@ -190,9 +193,9 @@ function makeResponsive() {
             .attr("r", 20)
             .attr("fill", "blue")
             .attr("opacity", ".6");
-
+        console.log(stateData)
         //append initial tags
-        var tagGroup = chartGroup.selectAll("text")
+        var tagGroup = newGroup.selectAll("text")
             .data(stateData)
             .enter()
             .append("text")
