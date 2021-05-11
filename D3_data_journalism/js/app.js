@@ -121,13 +121,21 @@ function makeResponsive() {
             .offset([110, 10])
             .html(function (d) {
                 return (`<b>${d.state}</b><br><b>${xlabel}:</b> ${d[chosenXAxis]}<br><b>${ylabel}:</b> ${d[chosenYAxis]}`);
+
             });
 
         circlesGroup.call(toolTip);
 
         circlesGroup.on("mouseover", function (data) {
-            toolTip.show(data, this);
+            toolTip.show(data, this)
         })
+            // .on("mouseover", function () {
+            //     toolTip.enter()
+            //         .append("circle")
+            //         .attr("r", "20")
+            //         .attr("stroke", "black")
+            //         .attr("stroke-width", "5")
+            // })
             // onmouseout event
             .on("mouseout", function (data, index) {
                 toolTip.hide(data);
