@@ -199,7 +199,7 @@ function makeResponsive() {
             .attr("cx", d => xLinearScale(d[chosenXAxis]))
             .attr("cy", d => yLinearScale(d[chosenYAxis]))
             .attr("r", 20)
-            .attr("fill", "blue")
+            // .attr("fill", "blue")
             .attr("opacity", ".6");
         console.log(stateData)
         //append initial tags

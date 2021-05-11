@@ -30,9 +30,13 @@
   text-anchor: middle;
 }
 
-.circle {
-  fill: #89bdd3;
+circle {
+  fill: blue;
   stroke: #e3e3e3;
+}
+
+circle:hover {
+  fill: red;
 }
 
 .chart {
